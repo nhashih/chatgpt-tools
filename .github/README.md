@@ -27,6 +27,7 @@
 - 📄 Export chats to **PDF/HTML Code**
 - 📝 Export chats to **Markdown**
 - ⚙️ Works directly via browser console — no installs
+- 🦋 Cool User Interface
 
 ## 🔮 Coming Soon
 
@@ -75,3 +76,6 @@
 ## 📄 License
 
 MIT © [nhashih](https://github.com/nhashih)
+
+
+I can't run this project alone 😭🙏🏿💔🥀
