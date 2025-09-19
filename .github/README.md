@@ -72,6 +72,11 @@
 - Archive important AI-assisted decisions
 
 ---
+## Todos
+
+- Add time in file name
+
+---
 
 ## 📄 License
 
