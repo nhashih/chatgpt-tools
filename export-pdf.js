@@ -18,20 +18,21 @@
     }
 
     function extractFormattedContent() {
-        const turns = document.querySelectorAll('div[class*="group/conversation-turn"]');
+        const turns = document.querySelectorAll('article[data-turn-id], div[data-turn-id]');
         let html = '';
 
-        turns.forEach(group => {
-            const block = group.querySelector('.markdown, .prose, .whitespace-pre-wrap');
+        turns.forEach(turn => {
+            const block = turn.querySelector('.markdown, .prose, .whitespace-pre-wrap');
             if (!block) return;
 
-            const senderRaw = block.classList.contains('markdown') ? 'ChatGPT' : 'You';
+            const roleAttr = turn.querySelector('[data-message-author-role]');
+            const senderRaw = roleAttr?.getAttribute('data-message-author-role') === 'assistant' ? 'ChatGPT' : 'You';
             const isAssistant = senderRaw === 'ChatGPT';
+
             const clone = block.cloneNode(true);
 
-            // Try to get time from title attribute (if available)
             let timestamp = '';
-            const timeContainer = group.querySelector('div[class*="whitespace-pre-wrap"]');
+            const timeContainer = turn.querySelector('div[title]');
             if (timeContainer && timeContainer.title) {
                 timestamp = timeContainer.title;
             } else {
@@ -247,15 +248,20 @@
     <script>
         function downloadPNG() {
             const container = document.getElementById('chat-container');
-            html2canvas(container, {
-                scale: 2,
-                useCORS: true
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'chat-export-${date}.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
+            setTimeout(() => {
+                html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'chat-export-${date}.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }).catch(err => {
+                    alert('Gagal membuat PNG: ' + err.message);
+                });
+            }, 500);
         }
 
         window.onload = () => {
